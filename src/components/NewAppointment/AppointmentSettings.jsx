@@ -2,24 +2,25 @@ import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import AlarmIcon from '@material-ui/icons/Alarm';
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/styles';
 import {Chip, Paper} from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
+import {useDispatch} from 'react-redux';
+import {addAppointment, setIsInstructorSelected} from '../../redux/slices/newAppointmentSlice';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     justifyContent: 'start',
     flexWrap: 'wrap',
     listStyle: 'none',
-    padding: theme.spacing(0.5),
+    padding: '0.5',
     backgroundColor: '#f7f8fa',
   },
   container: {
     marginTop: '4rem',
   },
   chip: {
-    margin: theme.spacing(0.5),
+    margin: '0.5',
   },
   addInstructorBtn: {
     position: 'relative',
@@ -28,7 +29,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppointmentTime = () => {
+const AppointmentSettings = ({instructor}) => {
+  const dispatch = useDispatch();
   const [chipData, setChipData] = React.useState([
     { key: 0, label: '11:00' },
     { key: 1, label: '13:00' },
@@ -42,16 +44,20 @@ const AppointmentTime = () => {
   };
 
   const handleAddInstructor = () => {
-
+    dispatch(addAppointment({id: instructor._id}));
+    dispatch(setIsInstructorSelected({id: instructor._id, isSelected: true}));
   }
 
   const classes = useStyles();
 
   return (
     <>
-      {/*<Fab onClick={handleAddInstructor} className={classes.addInstructorBtn} color="secondary" aria-label="add">*/}
-      {/*  <AddIcon />*/}
-      {/*</Fab>*/}
+      {!instructor.isSelected &&
+        <Fab onClick={handleAddInstructor} className={classes.addInstructorBtn} color="secondary" aria-label="add">
+          <AddIcon />
+        </Fab>
+      }
+      {instructor.isSelected &&
       <div className={classes.container}>
         <h3 style={{fontWeight: '400'}}>Время для записи:</h3>
         <Paper component="ul" className={classes.root}>
@@ -69,8 +75,9 @@ const AppointmentTime = () => {
           })}
         </Paper>
       </div>
+      }
     </>
   );
 };
 
-export default AppointmentTime;
+export default AppointmentSettings;

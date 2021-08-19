@@ -1,11 +1,11 @@
 import {Container} from '@material-ui/core';
-import Appointments from './components/Appointments/Appointments';
+import NewAppointment from './components/NewAppointment/NewAppointment';
 import './App.css';
 
 function App() {
   return (
     <Container>
-     <Appointments/>
+     <NewAppointment/>
     </Container>
   );
 }
