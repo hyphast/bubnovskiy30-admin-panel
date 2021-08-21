@@ -1,17 +1,18 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import {appointmentAPI} from '../../API/api';
+import {getUnixTime, isEqual} from 'date-fns';
 
-const timeTemplate = {
-  '08:00': 3,
-  '09:30': 3,
-  '11:00': 3,
-  '12:30': 3,
-  '14:30': 3,
-  '16:00': 3,
-  '17:30': 3,
-  '18:30': 3,
-  '19:40': 3,
-}
+const timeTemplate = [
+  [getUnixTime(new Date(1970, 0, 1, 8, 0)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 9, 30)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 11, 0)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 12, 30)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 14, 30)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 16, 0)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 17, 30)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 18, 30)), 3],
+  [getUnixTime(new Date(1970, 0, 1, 19, 40)), 3],
+];
 
 export const getInstructors = createAsyncThunk(
   'newAppointment/getInstructors',
@@ -21,6 +22,23 @@ export const getInstructors = createAsyncThunk(
     return data;
   }
 )
+
+export const resetAppointments = createAsyncThunk(
+  'newAppointment/resetAppointments',
+  async (_, { dispatch }) => {
+    dispatch(resetAppointmentsData());
+    dispatch(getInstructors());
+  }
+)
+
+export const setAppointments = createAsyncThunk(
+  'newAppointment/setAppointments',
+  async (_, { dispatch }) => {
+    dispatch(resetAppointmentsData());
+    dispatch(getInstructors());
+  }
+)
+
 
 const initialState = {
   appointments: [],
@@ -44,17 +62,26 @@ const newAppointmentSlice = createSlice({
     },
     addAppointment: (state, action) => {
       state.appointments.push({
-        instructor: action.payload.id,
-        ...timeTemplate,
+        instructorId: action.payload.id,
+        time: timeTemplate,
       });
     },
-    deleteAppointmentTime: (state, action) => {
-      // state.value -= 1
-    },
     createAppointmentTime: (state, action) => {
-      // state.value += action.payload
-    },
+      const appointment = state.appointments.find(app => app.instructorId === action.payload.id);
 
+      appointment.time = [...appointment.time, [action.payload.time, 3]];
+
+      appointment.time = appointment.time.sort((x, y) => x[0] - y[0]);
+
+    },
+    deleteAppointmentTime: (state, action) => {
+      const appointment = state.appointments.find(app => app.instructorId === action.payload.id);
+      appointment.time = appointment.time.filter(app => !isEqual(app[0], action.payload.time));
+    },
+    resetAppointmentsData: (state) => {
+      state.appointments = [];
+      state.instructors = [];
+    }
   },
   extraReducers: {
     [getInstructors.pending]: (state) => {
@@ -70,6 +97,9 @@ const newAppointmentSlice = createSlice({
   },
 });
 
-export const { setIsInstructorSelected, addAppointment } = newAppointmentSlice.actions;
+export const { setIsInstructorSelected, addAppointment,
+               deleteAppointmentTime, createAppointmentTime,
+               resetAppointmentsData,
+} = newAppointmentSlice.actions;
 
 export default newAppointmentSlice.reducer;

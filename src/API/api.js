@@ -33,4 +33,5 @@ export const appointmentAPI = {
   getInstructors() {
     return api.get('/instructors').then(response => response.data);
   },
+
 }
