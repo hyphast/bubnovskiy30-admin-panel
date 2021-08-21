@@ -27,7 +27,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AppointmentSettings = ({instructor}) => {
+const AppointmentSettings = ({instructor, setIsSubmit}) => {
   const [open, setOpen] = React.useState(false);
   const [error, setError] = React.useState(false);
   const [textError, setTextError] = React.useState('');
@@ -47,14 +47,14 @@ const AppointmentSettings = ({instructor}) => {
     <div className={classes.container}>
       <h3 style={{fontWeight: '400'}}>Время для записи:</h3>
       <div className={classes.root}>
-        {appointment[0].time.length && appointment[0].time.map((time) => {
+        {appointment[0].times.length && appointment[0].times.map((t) => {
           return (
-            <li key={time[0]}>
+            <li key={t.time}>
               <Chip
-                label={format(fromUnixTime(time[0]), 'H:mm')}
+                label={format(fromUnixTime(t.time), 'H:mm')}
                 variant="outlined"
                 color="primary"
-                onDelete={() => handleDelete(time[0])}
+                onDelete={() => handleDelete(t.time)}
                 className={classes.chip}
               />
             </li>
@@ -72,7 +72,7 @@ const AppointmentSettings = ({instructor}) => {
 
         {error && <AlertComponent setError={setError} error={error} textError={textError}/>}
 
-        <AppointmentsSubmitBtn/>
+        <AppointmentsSubmitBtn setIsSubmit={setIsSubmit}/>
       </div>
     </div>
   );

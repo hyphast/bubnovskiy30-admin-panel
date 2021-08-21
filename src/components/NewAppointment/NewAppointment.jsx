@@ -1,11 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
 import AppointmentDate from './AppointmentDate/AppointmentDate';
-import {getInstructors, resetAppointments} from '../../redux/slices/newAppointmentSlice';
+import {getUnixTime} from 'date-fns';
+import {Button, CircularProgress} from '@material-ui/core';
+import {getInstructors, resetAppointments, setAppointments} from '../../redux/slices/newAppointmentSlice';
 import AppointmentChooseInstructor from './AppointmentChooseInstructor/AppointmentСhooseInstructor';
 import {getInstructorsSelector, getIsLoadingsAppointmentsSelector} from '../../redux/selectors/newAppointmentSelector';
-import {Button, CircularProgress} from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
   resetBtn: {
@@ -23,9 +24,15 @@ const useStyles = makeStyles(() => ({
 }));
 
 const NewAppointment = () => {
+  const [date, setDate] = useState(null);
+  const [isSubmit, setIsSubmit] = useState(false);
   const dispatch = useDispatch();
   const isLoading = useSelector(getIsLoadingsAppointmentsSelector);
   const instructors = useSelector(getInstructorsSelector);
+
+  useEffect(() => {
+    isSubmit && dispatch(setAppointments(getUnixTime(date)));
+  }, [isSubmit])
 
   useEffect(() => {
     dispatch(getInstructors());
@@ -44,9 +51,9 @@ const NewAppointment = () => {
         <div className='container'>
           <h2>Создать новую запись</h2>
           <Button onClick={onReset} className={classes.resetBtn} variant="outlined">Сбросить</Button>
-          <AppointmentDate/>
+          <AppointmentDate setDate={setDate}/>
 
-          <AppointmentChooseInstructor instructors={instructors}/>
+          <AppointmentChooseInstructor setIsSubmit={setIsSubmit} instructors={instructors}/>
         </div>
     }
     </>

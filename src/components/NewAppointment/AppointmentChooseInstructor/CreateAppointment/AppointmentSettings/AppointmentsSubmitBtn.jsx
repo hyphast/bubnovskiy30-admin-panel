@@ -10,13 +10,16 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AppointmentsSubmitBtn = (props) => {
-
+const AppointmentsSubmitBtn = ({setIsSubmit}) => {
   const classes = useStyles();
 
   return (
     <>
-      <Button className={classes.submitBtn} variant="outlined" color="success">
+      <Button onClick={() => setIsSubmit(true)}
+              className={classes.submitBtn}
+              variant="outlined"
+              color="success"
+      >
         Создать
       </Button>
     </>

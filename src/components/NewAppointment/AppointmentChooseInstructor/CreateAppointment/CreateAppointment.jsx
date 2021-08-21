@@ -14,7 +14,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const CreateAppointment = ({instructor}) => {
+const CreateAppointment = ({instructor, setIsSubmit}) => {
   const dispatch = useDispatch();
 
   const handleAddInstructor = () => {
@@ -31,7 +31,7 @@ const CreateAppointment = ({instructor}) => {
           <AddIcon />
         </Fab>
       }
-      {instructor.isSelected && <AppointmentSettings instructor={instructor}/>}
+      {instructor.isSelected && <AppointmentSettings setIsSubmit={setIsSubmit} instructor={instructor}/>}
     </>
   );
 };

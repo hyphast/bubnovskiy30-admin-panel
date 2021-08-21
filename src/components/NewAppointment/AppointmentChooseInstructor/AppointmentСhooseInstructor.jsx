@@ -35,7 +35,7 @@ const a11yProps = (index) => {
   };
 }
 
-  const AppointmentChooseInstructor = ({instructors}) => {
+  const AppointmentChooseInstructor = ({instructors, setIsSubmit}) => {
     const [curTab, setCurTab] = React.useState(0);
 
     const handleChange = (event, newValue) => {
@@ -80,7 +80,7 @@ const a11yProps = (index) => {
             </Box>
             {instructors.map((inst, i) =>
               <TabPanel key={inst._id} value={curTab} index={i}>
-                <CreateAppointment instructor={inst}/>
+                <CreateAppointment setIsSubmit={setIsSubmit} instructor={inst}/>
               </TabPanel>
             )}
           </Box>

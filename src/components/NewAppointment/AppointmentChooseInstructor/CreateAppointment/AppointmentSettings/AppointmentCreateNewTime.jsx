@@ -35,7 +35,7 @@ const AppointmentCreateNewTime = ({instructor, appointment, setError, setOpen, o
     if (!selectedTime) {
       setError(true);
       setTextError('Вы не выбрали время!');
-    } else if (appointment[0].time.some(elem => elem[0] === getUnixTime(selectedTime))) {
+    } else if (appointment[0].times.some(elem => elem.time === getUnixTime(selectedTime))) {
       setError(true);
       setTextError('Такое время уже есть!');
     } else {

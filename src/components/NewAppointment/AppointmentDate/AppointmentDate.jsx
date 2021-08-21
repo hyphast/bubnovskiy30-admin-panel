@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Typography from '@material-ui/core/Typography';
 import ruLocale from 'date-fns/locale/ru';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
@@ -6,8 +6,12 @@ import TextField from '@material-ui/core/TextField';
 import LocalizationProvider from '@material-ui/lab/LocalizationProvider';
 import {DatePicker} from '@material-ui/lab';
 
-const AppointmentDate = (props) => {
+const AppointmentDate = ({setDate}) => {
   const [value, setValue] = React.useState(new Date());
+
+  useEffect(() => {
+    setDate(value);
+  }, [value])
 
   return (
     <>
