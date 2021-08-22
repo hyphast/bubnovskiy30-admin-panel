@@ -35,5 +35,8 @@ export const appointmentAPI = {
   },
   setAppointment(date, appointments) {
     return api.post('/appointments', {date, appointments}).then(response => response.data);
-  }
+  },
+  getTimeTemplate() {
+    return api.get('/appointments/time').then(response => response.data);
+  },
 }

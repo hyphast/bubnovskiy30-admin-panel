@@ -2,7 +2,7 @@ import React, {useMemo} from 'react';
 import {Chip} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
-import {format, fromUnixTime} from 'date-fns';
+import {format} from 'date-fns';
 import AppointmentCreateNewTime from './AppointmentCreateNewTime';
 import AppointmentsSubmitBtn from './AppointmentsSubmitBtn';
 import AlertComponent from '../../../../common/Alert/AlertComponent';
@@ -51,7 +51,7 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
           return (
             <li key={t.time}>
               <Chip
-                label={format(fromUnixTime(t.time), 'H:mm')}
+                label={format(t.time, 'H:mm')}
                 variant="outlined"
                 color="primary"
                 onDelete={() => handleDelete(t.time)}

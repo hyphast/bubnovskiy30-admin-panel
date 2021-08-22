@@ -2,11 +2,16 @@ import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
 import AppointmentDate from './AppointmentDate/AppointmentDate';
-import {getUnixTime} from 'date-fns';
 import {Button, CircularProgress} from '@material-ui/core';
-import {getInstructors, resetAppointments, setAppointments} from '../../redux/slices/newAppointmentSlice';
+import {
+  getInstructors,
+  getTimeTemplate,
+  resetAppointments,
+  setAppointments
+} from '../../redux/slices/newAppointmentSlice';
 import AppointmentChooseInstructor from './AppointmentChooseInstructor/AppointmentСhooseInstructor';
 import {getInstructorsSelector, getIsLoadingsAppointmentsSelector} from '../../redux/selectors/newAppointmentSelector';
+import {getTime} from 'date-fns';
 
 const useStyles = makeStyles(() => ({
   resetBtn: {
@@ -31,11 +36,12 @@ const NewAppointment = () => {
   const instructors = useSelector(getInstructorsSelector);
 
   useEffect(() => {
-    isSubmit && dispatch(setAppointments(getUnixTime(date)));
+    isSubmit && dispatch(setAppointments(+new Date(date)));
   }, [isSubmit])
 
   useEffect(() => {
     dispatch(getInstructors());
+    dispatch(getTimeTemplate());
   }, [dispatch]);
 
   const onReset = () => {

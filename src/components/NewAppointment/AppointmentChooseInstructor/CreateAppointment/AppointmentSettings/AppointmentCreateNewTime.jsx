@@ -1,11 +1,10 @@
 import React from 'react';
 import AdapterDateFns from '@material-ui/lab/AdapterDateFns';
-import {StaticTimePicker, LocalizationProvider} from '@material-ui/lab';
-import {TextField, Modal, Box, Button} from '@material-ui/core';
+import {LocalizationProvider, StaticTimePicker} from '@material-ui/lab';
+import {Box, Button, Modal, TextField} from '@material-ui/core';
 import ruLocale from 'date-fns/locale/ru';
 import {makeStyles} from '@material-ui/styles';
 import {useDispatch} from 'react-redux';
-import {getUnixTime} from 'date-fns';
 import {createAppointmentTime} from '../../../../../redux/slices/newAppointmentSlice';
 
 const useStyles = makeStyles(() => ({
@@ -32,14 +31,15 @@ const AppointmentCreateNewTime = ({instructor, appointment, setError, setOpen, o
 
   const onNewTime = () => {
     setOpen(false);
+    debugger
     if (!selectedTime) {
       setError(true);
       setTextError('Вы не выбрали время!');
-    } else if (appointment[0].times.some(elem => elem.time === getUnixTime(selectedTime))) {
+    } else if (appointment[0].times.some(elem => elem.time === +new Date(selectedTime))) {
       setError(true);
       setTextError('Такое время уже есть!');
     } else {
-      dispatch(createAppointmentTime({id: instructor._id, time: getUnixTime(selectedTime)}));
+      dispatch(createAppointmentTime({id: instructor._id, time: +new Date(selectedTime)}));
     }
   }
 
