@@ -1,11 +1,15 @@
 import React from 'react';
 import {Alert, Snackbar} from '@material-ui/core';
 
-const AlertComponent = ({setError, error, textError}) => {
+const AlertComponent = ({onClose, open, text, ver, hor, type}) => {
   return (
-    <Snackbar anchorOrigin={{vertical: 'top', horizontal: 'right'}} open={error} autoHideDuration={6000} onClose={() => setError(false)}>
-      <Alert onClose={() => setError(false)} severity="error" sx={{ width: '100%' }}>
-        {textError}
+    <Snackbar anchorOrigin={{vertical: ver, horizontal: hor}}
+              open={open}
+              autoHideDuration={6000}
+              onClose={() => onClose(false)}
+    >
+      <Alert onClose={() => onClose(false)} severity={type} sx={{ width: '100%' }}>
+        {text}
       </Alert>
     </Snackbar>
   );

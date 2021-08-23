@@ -12,6 +12,10 @@ export const getIsLoadingsAppointmentsSelector = (state) => {
   return state.newAppointment.isLoading;
 }
 
+export const getMessageAppointmentsSelector = (state) => {
+  return state.newAppointment.message;
+}
+
 export const getOneAppointmentSelector = () => {
   return createSelector(
     getAppointmentsSelector,

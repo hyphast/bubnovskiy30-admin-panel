@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {Chip} from '@material-ui/core';
 import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
@@ -28,9 +28,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 const AppointmentSettings = ({instructor, setIsSubmit}) => {
-  const [open, setOpen] = React.useState(false);
-  const [error, setError] = React.useState(false);
-  const [textError, setTextError] = React.useState('');
+  const [open, setOpen] = useState(false);
+  const [error, setError] = useState(false);
+  const [textError, setTextError] = useState('');
 
   const selectAppointment = useMemo(getOneAppointmentSelector, []);
   const dispatch = useDispatch();
@@ -42,12 +42,11 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
   };
 
   const classes = useStyles();
-
   return (
     <div className={classes.container}>
       <h3 style={{fontWeight: '400'}}>Время для записи:</h3>
       <div className={classes.root}>
-        {appointment[0].times.length && appointment[0].times.map((t) => {
+        {!!appointment[0].times.length && appointment[0].times.map((t) => {
           return (
             <li key={t.time}>
               <Chip
@@ -70,7 +69,7 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
                                   open={open}
         />
 
-        {error && <AlertComponent setError={setError} error={error} textError={textError}/>}
+        {error && <AlertComponent type='error' onClose={setError} open={error} text={textError} ver='top' hor='right'/>}
 
         <AppointmentsSubmitBtn setIsSubmit={setIsSubmit}/>
       </div>

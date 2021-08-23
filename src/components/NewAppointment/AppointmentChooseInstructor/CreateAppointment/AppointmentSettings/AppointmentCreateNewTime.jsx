@@ -31,7 +31,6 @@ const AppointmentCreateNewTime = ({instructor, appointment, setError, setOpen, o
 
   const onNewTime = () => {
     setOpen(false);
-    debugger
     if (!selectedTime) {
       setError(true);
       setTextError('Вы не выбрали время!');

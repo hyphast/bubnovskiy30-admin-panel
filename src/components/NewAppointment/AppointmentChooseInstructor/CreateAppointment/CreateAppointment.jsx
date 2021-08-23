@@ -1,10 +1,12 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import { makeStyles } from '@material-ui/styles';
-import {useDispatch} from 'react-redux';
-import {addAppointment, setIsInstructorSelected} from '../../../../redux/slices/newAppointmentSlice';
+import {useDispatch, useSelector} from 'react-redux';
+import {addAppointment, setIsInstructorSelected, resetMessage} from '../../../../redux/slices/newAppointmentSlice';
 import AppointmentSettings from './AppointmentSettings/AppointmentSettings';
+import AlertComponent from '../../../common/Alert/AlertComponent';
+import {getMessageAppointmentsSelector} from '../../../../redux/selectors/newAppointmentSelector';
 
 const useStyles = makeStyles(() => ({
   addInstructorBtn: {
@@ -15,7 +17,16 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CreateAppointment = ({instructor, setIsSubmit}) => {
+  const [msg, setMsg] = useState(false);
   const dispatch = useDispatch();
+  const message = useSelector(getMessageAppointmentsSelector);
+
+  useEffect(() => {
+    setMsg(true);
+    return () => {
+      dispatch(resetMessage());
+    }
+  }, [message, setMsg])
 
   const handleAddInstructor = () => {
     dispatch(addAppointment({id: instructor._id}));
@@ -32,6 +43,8 @@ const CreateAppointment = ({instructor, setIsSubmit}) => {
         </Fab>
       }
       {instructor.isSelected && <AppointmentSettings setIsSubmit={setIsSubmit} instructor={instructor}/>}
+
+      {message && <AlertComponent onClose={setMsg} open={msg} text={message} type='success' ver='top' hor='center'/>}
     </>
   );
 };

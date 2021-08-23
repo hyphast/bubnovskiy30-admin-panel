@@ -3,15 +3,12 @@ import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
 import AppointmentDate from './AppointmentDate/AppointmentDate';
 import {Button, CircularProgress} from '@material-ui/core';
-import {
-  getInstructors,
-  getTimeTemplate,
-  resetAppointments,
-  setAppointments
-} from '../../redux/slices/newAppointmentSlice';
+import {initializeNewAppointments, resetAppointments, setAppointments} from '../../redux/slices/newAppointmentSlice';
 import AppointmentChooseInstructor from './AppointmentChooseInstructor/AppointmentСhooseInstructor';
-import {getInstructorsSelector, getIsLoadingsAppointmentsSelector} from '../../redux/selectors/newAppointmentSelector';
-import {getTime} from 'date-fns';
+import {
+  getInstructorsSelector,
+  getIsLoadingsAppointmentsSelector,
+} from '../../redux/selectors/newAppointmentSelector';
 
 const useStyles = makeStyles(() => ({
   resetBtn: {
@@ -31,17 +28,19 @@ const useStyles = makeStyles(() => ({
 const NewAppointment = () => {
   const [date, setDate] = useState(null);
   const [isSubmit, setIsSubmit] = useState(false);
-  const dispatch = useDispatch();
   const isLoading = useSelector(getIsLoadingsAppointmentsSelector);
   const instructors = useSelector(getInstructorsSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     isSubmit && dispatch(setAppointments(+new Date(date)));
-  }, [isSubmit])
+    return () => {
+      setIsSubmit(false);
+    }
+  }, [isSubmit, dispatch, date])
 
   useEffect(() => {
-    dispatch(getInstructors());
-    dispatch(getTimeTemplate());
+    dispatch(initializeNewAppointments());
   }, [dispatch]);
 
   const onReset = () => {
@@ -52,16 +51,16 @@ const NewAppointment = () => {
 
   return (
     <>
-    {
-      isLoading ? <CircularProgress className={classes.preloader}/> :
-        <div className='container'>
-          <h2>Создать новую запись</h2>
-          <Button onClick={onReset} className={classes.resetBtn} variant="outlined">Сбросить</Button>
-          <AppointmentDate setDate={setDate}/>
+      {
+        isLoading ? <CircularProgress className={classes.preloader}/> :
+          <div className="container">
+            <h2>Создать новую запись</h2>
+            <Button onClick={onReset} className={classes.resetBtn} variant="outlined">Сбросить</Button>
+            <AppointmentDate setDate={setDate}/>
 
-          <AppointmentChooseInstructor setIsSubmit={setIsSubmit} instructors={instructors}/>
-        </div>
-    }
+            <AppointmentChooseInstructor setIsSubmit={setIsSubmit} instructors={instructors}/>
+          </div>
+      }
     </>
   );
 }

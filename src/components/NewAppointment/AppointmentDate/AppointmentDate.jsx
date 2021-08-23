@@ -11,7 +11,7 @@ const AppointmentDate = ({setDate}) => {
 
   useEffect(() => {
     setDate(value);
-  }, [value])
+  }, [value, setDate])
 
   return (
     <>
@@ -21,6 +21,7 @@ const AppointmentDate = ({setDate}) => {
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={ruLocale}>
         <DatePicker
           value={value}
+          inputFormat="dd/MM/yyyy"
           onChange={(newValue) => {
             setValue(newValue);
           }}

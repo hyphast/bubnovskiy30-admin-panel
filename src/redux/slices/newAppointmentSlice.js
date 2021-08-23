@@ -2,6 +2,20 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {appointmentAPI} from '../../API/api';
 import {isEqual} from 'date-fns';
 
+export const initializeNewAppointments = createAsyncThunk(
+  'newAppointment/initializeNewAppointments',
+  async (date, { dispatch, rejectWithValue }) => {
+    try {
+      const instructors = dispatch(getInstructors());
+      const timeTemplate = dispatch(getTimeTemplate());
+
+      return Promise.all([instructors, timeTemplate]);
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
+  }
+)
+
 export const getInstructors = createAsyncThunk(
   'newAppointment/getInstructors',
   async () => {
@@ -22,21 +36,32 @@ export const getTimeTemplate = createAsyncThunk(
 
 export const resetAppointments = createAsyncThunk(
   'newAppointment/resetAppointments',
-  async (_, { dispatch }) => {
-    dispatch(resetAppointmentsData());
-    dispatch(getInstructors());
-    dispatch(getTimeTemplate());
+  async (_, { dispatch, rejectWithValue}) => {
+    try {
+      dispatch(resetAppointmentsData());
+      const instructors = dispatch(getInstructors());
+      const timeTemplate = dispatch(getTimeTemplate());
+
+      return Promise.all([instructors, timeTemplate]);
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
   }
 )
 
 export const setAppointments = createAsyncThunk(
   'newAppointment/setAppointments',
-  async (date, { dispatch, getState }) => {
-    const appointments = getState().newAppointment.appointments;
-    const data = await appointmentAPI.setAppointment(date, appointments);
-    dispatch(resetAppointments());
+  async (date, { dispatch, getState, rejectWithValue }) => {
+    try {
+      const appointments = getState().newAppointment.appointments;
+      const data = await appointmentAPI.setAppointment(date, appointments);
 
-    return data;
+      dispatch(resetAppointments());
+
+      return data;
+    } catch (e) {
+      return rejectWithValue(e.message);
+    }
   }
 )
 
@@ -46,6 +71,7 @@ const initialState = {
   timeTemplate: [],
   isLoading: false,
   error: null,
+  message: '',
 }
 
 const newAppointmentSlice = createSlice({
@@ -72,13 +98,7 @@ const newAppointmentSlice = createSlice({
 
       appointment.times = [...appointment.times, {time: action.payload.time, free: 3}];
 
-      // appointment.times = appointment.times.sort((x, y) => x[0] - y[0]); //todo sort
-
-      // const sortable = Object.entries(appointment.times)
-      //   .sort(([,a],[,b]) => a.time - b.time)
-      //   .reduce((r, [k, v]) => ({ ...r, [k.time]: v.time, [k.free]: v.free }), {});
-
-      // appointment.times = sortable;
+      appointment.times = appointment.times.sort((a, b) => a.time - b.time);
     },
     deleteAppointmentTime: (state, action) => {
       const appointment = state.appointments.find(app => app.instructorId === action.payload.id);
@@ -88,36 +108,63 @@ const newAppointmentSlice = createSlice({
       state.appointments = [];
       state.instructors = [];
       state.timeTemplate = [];
+    },
+    resetMessage: (state) => {
+      state.message = '';
     }
   },
   extraReducers: {
-    [getInstructors.pending]: (state) => {
+    [initializeNewAppointments.pending]: (state) => {
       state.isLoading = true;
       state.error = null;
     },
-    [getInstructors.fulfilled]: (state, action) => {
+    [initializeNewAppointments.fulfilled]: (state) => {
       state.isLoading = false;
+    },
+    [initializeNewAppointments.rejected]: (state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [getInstructors.fulfilled]: (state, action) => {
       state.instructors = action.payload.map(item => {
         return {...item, isSelected: false}
       })
     },
-    [getTimeTemplate.pending]: (state) => {
-      state.isLoading = true;
-      state.error = null;
-    },
     [getTimeTemplate.fulfilled]: (state, action) => {
       state.isLoading = false;
-
       state.timeTemplate = action.payload.map(item => {
         return {time: +new Date(item.time), free: 3}
       })
     },
+    [setAppointments.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [setAppointments.fulfilled]: (state) => {
+      state.isLoading = false;
+      state.message = 'Запись была добавлена';
+    },
+    [setAppointments.rejected]:(state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    },
+    [resetAppointments.pending]: (state) => {
+      state.isLoading = true;
+      state.error = null;
+    },
+    [resetAppointments.fulfilled]: (state) => {
+      state.isLoading = false;
+    },
+    [resetAppointments.rejected]:(state, action) => {
+      state.isLoading = false;
+      state.error = action.payload;
+    }
   },
 });
 
 export const { setIsInstructorSelected, addAppointment,
                deleteAppointmentTime, createAppointmentTime,
-               resetAppointmentsData,
+               resetAppointmentsData, resetMessage,
 } = newAppointmentSlice.actions;
 
 export default newAppointmentSlice.reducer;
