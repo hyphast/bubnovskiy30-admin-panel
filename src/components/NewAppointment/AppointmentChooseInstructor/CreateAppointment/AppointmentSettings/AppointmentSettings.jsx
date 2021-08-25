@@ -25,6 +25,13 @@ const useStyles = makeStyles(() => ({
   chip: {
     margin: '0 0.3rem 0.3rem 0',
   },
+  addBtn: {
+    width: '36px',
+    height: '36px',
+    position: 'relative',
+    top: '-1.5px',
+    left: '4px',
+  }
 }));
 
 const AppointmentSettings = ({instructor, setIsSubmit}) => {
@@ -59,7 +66,7 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
             </li>
           );
         })}
-        <AddIconComponent setOpen={setOpen}/>
+        <AddIconComponent onClick={() => setOpen(true)} className={classes.addBtn} />
 
         <AppointmentCreateNewTime setTextError={setTextError}
                                   instructor={instructor}

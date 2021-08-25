@@ -5,10 +5,9 @@ import AppointmentDate from './AppointmentDate/AppointmentDate';
 import {Button, CircularProgress} from '@material-ui/core';
 import {initializeNewAppointments, resetAppointments, setAppointments} from '../../redux/slices/newAppointmentSlice';
 import AppointmentChooseInstructor from './AppointmentChooseInstructor/AppointmentСhooseInstructor';
-import {
-  getInstructorsSelector,
-  getIsLoadingsAppointmentsSelector,
-} from '../../redux/selectors/newAppointmentSelector';
+import {getInstructorsSelector, getIsLoadingsAppointmentsSelector,} from '../../redux/selectors/newAppointmentSelector';
+import NewAppointmentError from './NewAppointmentError';
+import NewAppointmentMessage from './NewAppointmentMessage';
 
 const useStyles = makeStyles(() => ({
   resetBtn: {
@@ -59,6 +58,8 @@ const NewAppointment = () => {
             <AppointmentDate setDate={setDate}/>
 
             <AppointmentChooseInstructor setIsSubmit={setIsSubmit} instructors={instructors}/>
+            <NewAppointmentError/>
+            <NewAppointmentMessage/>
           </div>
       }
     </>

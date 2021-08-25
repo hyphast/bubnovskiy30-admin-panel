@@ -16,6 +16,10 @@ export const getMessageAppointmentsSelector = (state) => {
   return state.newAppointment.message;
 }
 
+export const getErrorAppointmentsSelector = (state) => {
+  return state.newAppointment.error;
+}
+
 export const getOneAppointmentSelector = () => {
   return createSelector(
     getAppointmentsSelector,

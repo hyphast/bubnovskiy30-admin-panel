@@ -1,12 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import AddIcon from '@material-ui/icons/Add';
-import Fab from '@material-ui/core/Fab';
-import { makeStyles } from '@material-ui/styles';
-import {useDispatch, useSelector} from 'react-redux';
-import {addAppointment, setIsInstructorSelected, resetMessage} from '../../../../redux/slices/newAppointmentSlice';
+import React from 'react';
+import {makeStyles} from '@material-ui/styles';
+import {useDispatch} from 'react-redux';
+import {addAppointment, setIsInstructorSelected} from '../../../../redux/slices/newAppointmentSlice';
 import AppointmentSettings from './AppointmentSettings/AppointmentSettings';
-import AlertComponent from '../../../common/Alert/AlertComponent';
-import {getMessageAppointmentsSelector} from '../../../../redux/selectors/newAppointmentSelector';
+import AddIconComponent from '../../../common/AddIconComponent/AddIconComponent';
 
 const useStyles = makeStyles(() => ({
   addInstructorBtn: {
@@ -17,19 +14,10 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CreateAppointment = ({instructor, setIsSubmit}) => {
-  const [msg, setMsg] = useState(false);
   const dispatch = useDispatch();
-  const message = useSelector(getMessageAppointmentsSelector);
-
-  useEffect(() => {
-    setMsg(true);
-    return () => {
-      dispatch(resetMessage());
-    }
-  }, [message, setMsg])
 
   const handleAddInstructor = () => {
-    dispatch(addAppointment({id: instructor._id}));
+    dispatch(addAppointment({id: instructor._id, name: instructor.fullName}));
     dispatch(setIsInstructorSelected({id: instructor._id, isSelected: true}));
   }
 
@@ -38,13 +26,9 @@ const CreateAppointment = ({instructor, setIsSubmit}) => {
   return (
     <>
       {!instructor.isSelected &&
-        <Fab onClick={handleAddInstructor} className={classes.addInstructorBtn} color="primary" aria-label="add">
-          <AddIcon />
-        </Fab>
+        <AddIconComponent onClick={handleAddInstructor} className={classes.addInstructorBtn}/>
       }
       {instructor.isSelected && <AppointmentSettings setIsSubmit={setIsSubmit} instructor={instructor}/>}
-
-      {message && <AlertComponent onClose={setMsg} open={msg} text={message} type='success' ver='top' hor='center'/>}
     </>
   );
 };

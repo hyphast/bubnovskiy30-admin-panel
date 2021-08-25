@@ -54,13 +54,13 @@ export const setAppointments = createAsyncThunk(
   async (date, { dispatch, getState, rejectWithValue }) => {
     try {
       const appointments = getState().newAppointment.appointments;
+      debugger
       const data = await appointmentAPI.setAppointment(date, appointments);
-
       dispatch(resetAppointments());
 
       return data;
     } catch (e) {
-      return rejectWithValue(e.message);
+      return rejectWithValue(e.response.data.message);
     }
   }
 )
@@ -70,7 +70,7 @@ const initialState = {
   instructors: [],
   timeTemplate: [],
   isLoading: false,
-  error: null,
+  error: '',
   message: '',
 }
 
@@ -90,6 +90,7 @@ const newAppointmentSlice = createSlice({
     addAppointment: (state, action) => {
       state.appointments.push({
         instructorId: action.payload.id,
+        instructorName: action.payload.name,
         times: state.timeTemplate,
       });
     },
@@ -111,6 +112,9 @@ const newAppointmentSlice = createSlice({
     },
     resetMessage: (state) => {
       state.message = '';
+    },
+    resetError: (state) => {
+      state.error = '';
     }
   },
   extraReducers: {
@@ -164,7 +168,7 @@ const newAppointmentSlice = createSlice({
 
 export const { setIsInstructorSelected, addAppointment,
                deleteAppointmentTime, createAppointmentTime,
-               resetAppointmentsData, resetMessage,
+               resetAppointmentsData, resetMessage, resetError,
 } = newAppointmentSlice.actions;
 
 export default newAppointmentSlice.reducer;
