@@ -10,10 +10,13 @@ import NewAppointmentError from './NewAppointmentError';
 import NewAppointmentMessage from './NewAppointmentMessage';
 
 const useStyles = makeStyles(() => ({
+  title: {
+    display: 'flex',
+  },
   resetBtn: {
-    position: 'absolute',
+    position: 'relative',
     top: '1.5rem',
-    left: '24rem',
+    left: '0.5rem',
     width: '90px',
     height: '32px',
   },
@@ -53,8 +56,10 @@ const NewAppointment = () => {
       {
         isLoading ? <CircularProgress className={classes.preloader}/> :
           <div className="container">
-            <h2>Создать новую запись</h2>
-            <Button onClick={onReset} className={classes.resetBtn} variant="outlined">Сбросить</Button>
+            <div className={classes.title}>
+              <h2>Создать новую запись</h2>
+              <Button onClick={onReset} className={classes.resetBtn} variant="outlined">Сбросить</Button>
+            </div>
             <AppointmentDate setDate={setDate}/>
 
             <AppointmentChooseInstructor setIsSubmit={setIsSubmit} instructors={instructors}/>

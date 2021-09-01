@@ -11,6 +11,7 @@ const AppointmentDate = ({setDate}) => {
   const [highlightedDays, setHighlightedDays] = React.useState([29, 30, 31]);
 
   useEffect(() => {
+    console.log(value)
     setDate(value);
   }, [value, setDate])
 

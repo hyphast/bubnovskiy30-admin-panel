@@ -78,8 +78,8 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
 
         {error && <AlertComponent type='error' onClose={setError} open={error} text={textError} ver='top' hor='right'/>}
 
-        <AppointmentsSubmitBtn setIsSubmit={setIsSubmit}/>
       </div>
+      <AppointmentsSubmitBtn setIsSubmit={setIsSubmit}/>
     </div>
   );
 };

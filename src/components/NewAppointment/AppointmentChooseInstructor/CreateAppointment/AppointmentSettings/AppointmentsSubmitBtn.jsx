@@ -4,9 +4,9 @@ import {makeStyles} from '@material-ui/styles';
 
 const useStyles = makeStyles(() => ({
   submitBtn: {
-    position: 'absolute',
-    top: '35rem',
-    left: '72rem',
+    position: 'relative',
+    top: '10rem',
+    left: '63rem',
   },
 }));
 
