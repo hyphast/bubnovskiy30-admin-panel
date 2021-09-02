@@ -14,7 +14,7 @@ const NewAppointmentError = (props) => {
     return () => {
       dispatch(resetError());
     }
-  }, [error, setErr])
+  }, [error, setErr, dispatch])
 
   return (
     <>

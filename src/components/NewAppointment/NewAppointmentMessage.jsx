@@ -14,7 +14,7 @@ const NewAppointmentMessage = () => {
     return () => {
       dispatch(resetMessage());
     }
-  }, [message, setMsg])
+  }, [message, setMsg, dispatch])
   return (
     <>
       {message && <AlertComponent onClose={setMsg} open={msg} text={message} type='success' ver='top' hor='center'/>}
