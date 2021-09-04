@@ -25,7 +25,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const AppointmentCreateNewTime = ({instructor, appointment, setError, setOpen, open, setTextError}) => {
+const AppointmentCreateNewTime = ({instructor, instructorTime, setError, setOpen, open, setTextError}) => {
   const [selectedTime, setSelectedTime] = React.useState(false);
   const dispatch = useDispatch();
 
@@ -34,11 +34,11 @@ const AppointmentCreateNewTime = ({instructor, appointment, setError, setOpen, o
     if (!selectedTime) {
       setError(true);
       setTextError('Вы не выбрали время!');
-    } else if (appointment[0].times.some(elem => elem.time === +new Date(selectedTime))) {
+    } else if (instructorTime.some(elem => elem === +new Date(selectedTime))) {
       setError(true);
       setTextError('Такое время уже есть!');
     } else {
-      dispatch(createAppointmentTime({id: instructor._id, time: +new Date(selectedTime)}));
+      dispatch(createAppointmentTime({id: instructor._id, name: instructor.fullName, time: +new Date(selectedTime)}));
     }
   }
 

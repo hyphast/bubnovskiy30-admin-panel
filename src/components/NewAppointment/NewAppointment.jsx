@@ -3,7 +3,11 @@ import {useDispatch, useSelector} from 'react-redux';
 import {makeStyles} from '@material-ui/styles';
 import AppointmentDate from './AppointmentDate/AppointmentDate';
 import {Button, CircularProgress} from '@material-ui/core';
-import {initializeNewAppointments, resetAppointments, setAppointments} from '../../redux/slices/newAppointmentSlice';
+import {
+  createAppointment,
+  initializeNewAppointments,
+  resetAppointments,
+} from '../../redux/slices/newAppointmentSlice';
 import AppointmentChooseInstructor from './AppointmentChooseInstructor/AppointmentСhooseInstructor';
 import {getInstructorsSelector, getIsLoadingsAppointmentsSelector,} from '../../redux/selectors/newAppointmentSelector';
 import NewAppointmentError from './NewAppointmentError';
@@ -35,7 +39,7 @@ const NewAppointment = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    isSubmit && dispatch(setAppointments(+new Date(date)));
+    isSubmit && dispatch(createAppointment(+new Date(date)));
     return () => {
       setIsSubmit(false);
     }

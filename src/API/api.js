@@ -33,7 +33,7 @@ export const appointmentAPI = {
   getInstructors() {
     return api.get('/instructors').then(response => response.data);
   },
-  setAppointment(date, appointments) {
+  createAppointment(date, appointments) {
     return api.post('/appointments', {date, appointments}).then(response => response.data);
   },
   getTimeTemplate() {

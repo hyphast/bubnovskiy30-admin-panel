@@ -20,10 +20,15 @@ export const getErrorAppointmentsSelector = (state) => {
   return state.newAppointment.error;
 }
 
-export const getOneAppointmentSelector = () => {
+export const getInstructorTime = () => {
   return createSelector(
     getAppointmentsSelector,
     (_, id) => id,
-    (appointments, id) =>
-      appointments.filter((appointment) => appointment.instructorId === id))
+    (appointments, id) => {
+      const apps = appointments.filter(appointment => {
+        return appointment.instructors.find(item => item.instructorId === id)
+      });
+      return apps.map(item => item.time);
+    }
+  )
 }

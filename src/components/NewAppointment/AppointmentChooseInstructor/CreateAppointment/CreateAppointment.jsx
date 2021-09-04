@@ -1,7 +1,7 @@
 import React from 'react';
 import {makeStyles} from '@material-ui/styles';
 import {useDispatch} from 'react-redux';
-import {addAppointment, setIsInstructorSelected} from '../../../../redux/slices/newAppointmentSlice';
+import {addInstructor, setIsInstructorSelected} from '../../../../redux/slices/newAppointmentSlice';
 import AppointmentSettings from './AppointmentSettings/AppointmentSettings';
 import AddIconComponent from '../../../common/AddIconComponent/AddIconComponent';
 
@@ -17,7 +17,7 @@ const CreateAppointment = ({instructor, setIsSubmit}) => {
   const dispatch = useDispatch();
 
   const handleAddInstructor = () => {
-    dispatch(addAppointment({id: instructor._id, name: instructor.fullName}));
+    dispatch(addInstructor({id: instructor._id, name: instructor.fullName}));
     dispatch(setIsInstructorSelected({id: instructor._id, isSelected: true}));
   }
 

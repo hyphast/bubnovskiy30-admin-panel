@@ -8,7 +8,7 @@ import AppointmentsSubmitBtn from './AppointmentsSubmitBtn';
 import AlertComponent from '../../../../common/Alert/AlertComponent';
 import AddIconComponent from '../../../../common/AddIconComponent/AddIconComponent';
 import {deleteAppointmentTime} from '../../../../../redux/slices/newAppointmentSlice';
-import {getOneAppointmentSelector} from '../../../../../redux/selectors/newAppointmentSelector';
+import {getInstructorTime} from '../../../../../redux/selectors/newAppointmentSelector';
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -39,10 +39,10 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
   const [error, setError] = useState(false);
   const [textError, setTextError] = useState('');
 
-  const selectAppointment = useMemo(getOneAppointmentSelector, []);
+  const selectAppointment = useMemo(getInstructorTime, []);
   const dispatch = useDispatch();
 
-  const appointment = useSelector(state => selectAppointment(state, instructor._id));
+  const instructorTime = useSelector(state => selectAppointment(state, instructor._id));
 
   const handleDelete = (timeToDelete) => {
     dispatch(deleteAppointmentTime({id: instructor._id, time: timeToDelete}));
@@ -53,14 +53,14 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
     <div className={classes.container}>
       <h3 style={{fontWeight: '400'}}>Время для записи:</h3>
       <div className={classes.root}>
-        {!!appointment[0].times.length && appointment[0].times.map((t) => {
+        {!!instructorTime.length && instructorTime.map((time) => {
           return (
-            <li key={t.time}>
+            <li key={time}>
               <Chip
-                label={format(t.time, 'H:mm')}
+                label={format(time, 'H:mm')}
                 variant="outlined"
                 color="primary"
-                onDelete={() => handleDelete(t.time)}
+                onDelete={() => handleDelete(time)}
                 className={classes.chip}
               />
             </li>
@@ -70,7 +70,7 @@ const AppointmentSettings = ({instructor, setIsSubmit}) => {
 
         <AppointmentCreateNewTime setTextError={setTextError}
                                   instructor={instructor}
-                                  appointment={appointment}
+                                  instructorTime={instructorTime}
                                   setError={setError}
                                   setOpen={setOpen}
                                   open={open}
