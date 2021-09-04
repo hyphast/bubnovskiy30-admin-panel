@@ -54,7 +54,6 @@ export const createAppointment = createAsyncThunk(
   async (date, {dispatch, getState, rejectWithValue}) => {
     try {
       const appointments = getState().newAppointment.appointments;
-      debugger
       const data = await appointmentAPI.createAppointment(date, appointments);
       dispatch(resetAppointments());
 
@@ -93,7 +92,7 @@ const newAppointmentSlice = createSlice({
             time: item.time,
             instructors: [],
             patients: [],
-            patientsNumber: null,
+            numberPatients: null,
             free: 0,
           })
         })
@@ -108,6 +107,7 @@ const newAppointmentSlice = createSlice({
                 instructorName: action.payload.name,
               },
             ]
+            appointment.free = appointment.free + 3;
           } else {
             state.appointments.push({
               time: t.time,
@@ -117,8 +117,8 @@ const newAppointmentSlice = createSlice({
                   instructorName: action.payload.name,
                 },
               ],
-              patients: null,
-              patientsNumber: null,
+              patients: [],
+              numberPatients: null,
               free: 3,
             })
           }
@@ -132,12 +132,13 @@ const newAppointmentSlice = createSlice({
         if (appointment) {
           appointment.instructors =
             [...appointment.instructors, {instructorId: action.payload.id, instructorName: action.payload.name}];
+          appointment.free = appointment.free + 3;
         } else {
           state.appointments.push({
             time: action.payload.time,
             instructors: [{instructorId: action.payload.id, instructorName: action.payload.name}],
-            patients: null,
-            patientsNumber: null,
+            patients: [],
+            numberPatients: null,
             free: 3,
           })
         }
@@ -148,6 +149,7 @@ const newAppointmentSlice = createSlice({
         const appointment = state.appointments.find(app => app.time === action.payload.time);
 
         appointment.instructors = appointment.instructors.filter(inst => inst.instructorId !== action.payload.id);
+        appointment.free = appointment.free - 3;
 
         if (!appointment.instructors.length) {
           state.appointments = state.appointments.filter(item => item.time !== action.payload.time);
