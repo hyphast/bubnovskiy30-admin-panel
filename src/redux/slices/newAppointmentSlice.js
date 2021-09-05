@@ -54,6 +54,7 @@ export const createAppointment = createAsyncThunk(
   async (date, {dispatch, getState, rejectWithValue}) => {
     try {
       const appointments = getState().newAppointment.appointments;
+      console.dir(appointments);
       const data = await appointmentAPI.createAppointment(date, appointments);
       dispatch(resetAppointments());
 

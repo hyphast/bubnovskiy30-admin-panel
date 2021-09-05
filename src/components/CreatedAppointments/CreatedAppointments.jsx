@@ -47,7 +47,7 @@ const CreatedAppointments = () => {
   return (
     <div>
       {appointments.map(item =>
-        <>
+        <div key={item._id}>
           <Card variant="outlined" style={{marginTop: '1rem', border: '1px solid #acb0b5'}}>
             <CardHeader
               action={
@@ -58,12 +58,13 @@ const CreatedAppointments = () => {
               title={format(new Date(item.date), 'd MMMM yyyy eeee', {locale: ru})}
             />
             {item.appointments.map(app =>
-              <>
+              <div key={app._id}>
                 <CardContent>
                   <Stack direction="row" spacing={1}>
                     <span style={{fontWeight: 700}}>Инструкторы:</span>
                     {app?.instructors.map(inst =>
                       <Chip
+                        key={inst.instructorId}
                         avatar={<Avatar sx={{bgcolor: '#cad9ce'}} alt="Name"/>}
                         label={inst.instructorName}
                         variant="outlined"
@@ -83,6 +84,7 @@ const CreatedAppointments = () => {
                         {app.patients.length === 0 ? <span style={{fontStyle: 'italic'}}>Записей нет</span> :
                           app.patients.map(p =>
                           <Chip
+                            key={p._id}
                             avatar={<Avatar sx={{bgcolor: '#b5f5c6'}} alt="Patient"/>}
                             label={p.patientName}
                             variant="outlined"
@@ -92,10 +94,10 @@ const CreatedAppointments = () => {
                     </AccordionDetails>
                   </Accordion>
                 </CardContent>
-              </>
+              </div>
             )}
           </Card>
-        </>
+        </div>
       )}
     </div>
   );
