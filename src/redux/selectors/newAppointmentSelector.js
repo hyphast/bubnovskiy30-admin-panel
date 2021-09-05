@@ -20,6 +20,15 @@ export const getErrorAppointmentsSelector = (state) => {
   return state.newAppointment.error;
 }
 
+export const getCreatedAppointmentsSelector = (state) => {
+  return state.createdAppointments.appointments;
+}
+
+export const getIsLoadingsCreatedAppointmentsSelector = (state) => {
+  return state.createdAppointments.isLoading;
+}
+
+
 export const getInstructorTime = () => {
   return createSelector(
     getAppointmentsSelector,

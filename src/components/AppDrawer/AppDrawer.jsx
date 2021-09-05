@@ -18,6 +18,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ListItemText from '@material-ui/core/ListItemText';
 import {Link} from 'react-router-dom';
+import StorageIcon from '@material-ui/icons/Storage';
 
 const drawerWidth = 250;
 
@@ -140,7 +141,7 @@ function AppDrawer({children}) {
           <Link to="/created-appointments" style={{textDecoration: 'none', color: 'black'}}>
             <ListItem button>
               <ListItemIcon>
-                <InboxIcon/>
+                <StorageIcon/>
               </ListItemIcon>
               <ListItemText primary="Созданные записи"/>
             </ListItem>

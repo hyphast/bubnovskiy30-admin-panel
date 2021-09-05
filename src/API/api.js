@@ -40,3 +40,9 @@ export const appointmentAPI = {
     return api.get('/appointments/time').then(response => response.data);
   },
 }
+
+export const createdAppointmentsAPI = {
+  getCreatedAppointments() {
+    return api.get('/created-appointments').then(response => response.data);
+  },
+}
