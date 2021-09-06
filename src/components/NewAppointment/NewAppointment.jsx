@@ -50,7 +50,7 @@ const NewAppointment = () => {
   }, [dispatch]);
 
   const onReset = () => {
-    dispatch(resetAppointments());
+    dispatch(initializeNewAppointments());
   }
 
   const classes = useStyles();

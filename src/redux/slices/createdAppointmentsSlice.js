@@ -6,7 +6,6 @@ export const getCreatedAppointments = createAsyncThunk(
   async (_, {rejectWithValue}) => {
     try {
       const data = await createdAppointmentsAPI.getCreatedAppointments();
-      debugger
 
       return data;
     } catch (e) {

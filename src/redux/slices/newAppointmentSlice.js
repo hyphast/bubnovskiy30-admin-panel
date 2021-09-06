@@ -1,11 +1,11 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {appointmentAPI} from '../../API/api';
-import {isEqual} from 'date-fns';
 
 export const initializeNewAppointments = createAsyncThunk(
-  'newAppointment/initializeNewAppointments',
-  async (date, {dispatch, rejectWithValue}) => {
+  'newAppointment/resetAppointments',
+  async (_, {dispatch, rejectWithValue}) => {
     try {
+      dispatch(resetAppointmentsData());
       const instructors = dispatch(getInstructors());
       const timeTemplate = dispatch(getTimeTemplate());
 
@@ -34,29 +34,13 @@ export const getTimeTemplate = createAsyncThunk(
   },
 )
 
-export const resetAppointments = createAsyncThunk(
-  'newAppointment/resetAppointments',
-  async (_, {dispatch, rejectWithValue}) => {
-    try {
-      dispatch(resetAppointmentsData());
-      const instructors = dispatch(getInstructors());
-      const timeTemplate = dispatch(getTimeTemplate());
-
-      return Promise.all([instructors, timeTemplate]).then(() => dispatch(initializeData()));
-    } catch (e) {
-      return rejectWithValue(e.message);
-    }
-  },
-)
-
 export const createAppointment = createAsyncThunk(
   'newAppointment/createAppointment',
   async (date, {dispatch, getState, rejectWithValue}) => {
     try {
       const appointments = getState().newAppointment.appointments;
-      console.dir(appointments);
       const data = await appointmentAPI.createAppointment(date, appointments);
-      dispatch(resetAppointments());
+      dispatch(initializeNewAppointments());
 
       return data;
     } catch (e) {
@@ -153,9 +137,9 @@ const newAppointmentSlice = createSlice({
         appointment.free = appointment.free - 3;
 
         if (!appointment.instructors.length) {
+          console.log('deleted')
           state.appointments = state.appointments.filter(item => item.time !== action.payload.time);
         }
-        // appointment.times = appointment.times.filter(app => !isEqual(app.time, action.payload.time));
       },
       resetAppointmentsData: (state) => {
         state.appointments = [];
@@ -208,20 +192,6 @@ const newAppointmentSlice = createSlice({
           state.message = 'Запись была добавлена';
         },
       [createAppointment.rejected]:
-        (state, action) => {
-          state.isLoading = false;
-          state.error = action.payload;
-        },
-      [resetAppointments.pending]:
-        (state) => {
-          state.isLoading = true;
-          state.error = null;
-        },
-      [resetAppointments.fulfilled]:
-        (state) => {
-          state.isLoading = false;
-        },
-      [resetAppointments.rejected]:
         (state, action) => {
           state.isLoading = false;
           state.error = action.payload;
